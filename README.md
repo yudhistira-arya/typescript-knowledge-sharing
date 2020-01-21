@@ -31,7 +31,7 @@ Benefit of using Typescript:
     ```
 * Tooling: Webstorm and VsCode seems to work better with Typescript
     * If used correctly, it's more refactoring friendly than JavaScript
-    * If used correctly, it can provide accurate intellisense (code auto-complete)
+    * If used correctly, it can provide accurate *Intellisense* (code auto-complete)
 
 ### Configuration
 
@@ -157,9 +157,154 @@ Besides the basic `for`, there 2 additional types of for loop:
   
 There's also `array.forEach` and `array.map` functions.
 
-### Double Arrow Function
+## 02: this
 
-## 02: Object, Classes, Interfaces
+### Rule 1: Default Bindings
+
+During standalone function invocation, `this` will bind to global object. 
+
+try the following code in browser console:
+
+```
+var count = 1000;
+function foo() {
+    console.log(this.count);
+    this.count++;
+}
+foo();
+foo();
+```
+* The example above won't run in `strict mode`
+* The example above won't run in Node.js. In Node.js, module will run inside a wrapper function (so there's no real 
+  _global_ context). For more info:
+    * [stackoverflow answer](https://stackoverflow.com/a/27032022)
+    * [github](https://github.com/nodejs/node-v0.x-archive/blob/v0.10.33-release/src/node.js#L883-L885)
+    
+### Rule 2: Implicit Bindings
+
+Bind to the owning object in the call site regardless of the function declaration.
+
+``` 
+function foo() {
+    console.log(`a is: ${this.a}`);
+}
+
+var obj = {
+    a: 2,
+    foo: foo
+};
+
+obj.foo();
+```
+
+Potential bug caused by with implicit bindings: 
+
+``` 
+function foo() {
+    console.log(`a is: ${this.a}`);
+}
+
+var obj = {
+    a: 2,
+    foo: foo
+};
+
+setTimeout(obj.foo, 100); // see Rule#1
+```
+
+### Rule 3: Explicit Bindings
+
+2 approaches:
+1. Create a new function which bind to the object explicitly: 
+    ``` 
+    function foo() {
+        console.log(`a is: ${this.a}`);
+    }
+
+    const obj = {
+        a: 2,
+    };
+
+    const bindFoo = foo.bind(obj);
+    bindFoo(); // this will always refer to obj
+    ```
+1. Use `apply` to invoke a function:
+    ``` 
+   function foo() {
+       console.log(`a is: ${this.a}`);
+   }
+
+   const obj = {
+       a: 2,
+   };
+   
+   foo.apply(obj) // a is: 2
+   ```
+   
+### Rule 4: New Operator (Constructor Binding)
+
+What `new` keyword really does: 
+1. Creates a blank, plain JavaScript object;
+1. Links (sets the constructor of) this object to another object;
+1. Passes the newly created object from Step 1 as the `this` context;
+1. Returns `this` if the function doesn't return its own object.
+
+```
+function Foo(a) {
+    this.a = a;
+}
+const bar = new Foo( 2 );
+console.log( bar.a ); // 2
+```
+
+### Arrow Function
+
+Purpose of arrow function: 
+* shorter form of anonymous function: 
+   ``` 
+  const sum = [1, 2, 3].reduce((prev, curr) => prev + curr);
+  console.log(sum);
+   ```
+* Simplify the concept of `this`. An arrow function does not create/bind its own `this` context on the call site, so 
+  `this` has the original meaning from the enclosing context during declaration. Before ECMAScript 6: 
+  
+   1. Example below will throw error because `this` inside `setInterval` is not the same with `this` inside the `Person` 
+      constructor (remember rule#1?).
+       ``` 
+       function Person() {
+         this.age = 0;
+         setInterval(function growUp() {
+           this.age++;
+         }, 1000);
+       }
+
+       var p = new Person();
+       ```
+    1. This can be somewhat fixed by capturing the value of `this`: 
+       ``` 
+       function Person() {
+        var that = this; // remember in chapter 01 - variable is function scoped in JavaScript
+        that.age = 0;
+       
+        setInterval(function growUp() {
+          that.age++;
+        }, 1000);
+       }
+       
+       var p = new Person();
+       ```
+    1. In ECMAScript 6, we can use arrow function to achieve the same thing: 
+       ``` 
+       function Person() {
+           this.age = 0;
+           setInterval(() => {
+             this.age++;
+           }, 1000);
+       }
+       const p = new Person();
+       ```
+
+## 03: Object, Classes, Interfaces
 
 ### Classes
 
@@ -167,10 +312,6 @@ There's also `array.forEach` and `array.map` functions.
 
 ### Object Literal
 
-### Spread Operator
+TODO: don't forget spread operator
 
-## 03: Promise
-
-## 04: Generators
-
-## 05: Async-await
+## 04: Promise, Generators, Async-await 
