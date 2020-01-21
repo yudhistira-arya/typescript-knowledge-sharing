@@ -157,7 +157,7 @@ Besides the basic `for`, there 2 additional types of for loop:
   
 There's also `array.forEach` and `array.map` functions.
 
-## 02: this
+## 02: `this` Bindings
 
 ### Rule 1: Default Bindings
 
