@@ -33,6 +33,9 @@ Benefit of using Typescript:
     * If used correctly, it's more refactoring friendly than JavaScript
     * If used correctly, it can provide accurate *Intellisense* (code auto-complete)
 
+**NOTE**: Since Typescript is a superset of JavaScript, a strong primer of JavaScript is recommended. Most of the topics
+in this knowledge sharing are actually core JavaScript concepts (especially related to ECMAScript 6 and above).
+
 ### Configuration
 
 Dependencies: 
@@ -52,6 +55,39 @@ Dependencies:
 
 Typescript has a community repository of types located at `http://definitelytyped.org/`. It's npm-scoped under `@types`. For example, if 
 you want type definition for Node.js server development: `npm install --save @types/node`. 
+
+`tsconfig.json`: configure the behavior of typscript compiler.
+* the presence of this file indicates the root directory of a typescript project
+* the configuration that I will used for this knowledge sharing: 
+    ``` 
+    {
+      "compilerOptions": {
+        "baseUrl": "./",
+        "outDir": "./dist/", // compiled js will be located here
+        "sourceMap": true, // for debugging purpose
+        "declaration": false,
+        "downlevelIteration": true,
+        "experimentalDecorators": true,
+        "module": "commonjs", // most of the example will be run in node, so use commonjs
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "allowJs": true, // also include javascript file if needed
+        "target": "es2015",
+        "typeRoots": [
+          "./node_modules/@types" // location of type definition
+        ],
+        "types": [] // if you add custom types, add it here.
+      },
+      "include": [
+        "**.ts",
+        "**.tsx",
+        "**.js"
+      ],
+      "compileOnSave": true, // auto rebuild
+      "files": ["main.ts"] // entry point
+    }
+    ```
+* For more [information](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html).
 
 ## 01: Basic
 
@@ -266,7 +302,7 @@ Purpose of arrow function:
   console.log(sum);
    ```
 * Simplify the concept of `this`. An arrow function does not create/bind its own `this` context on the call site, so 
-  `this` has the original meaning from the enclosing context during declaration. Before ECMAScript 6: 
+  `this` has the original meaning from the enclosing context during declaration. 
   
    1. Example below will throw error because `this` inside `setInterval` is not the same with `this` inside the `Person` 
       constructor (remember rule#1?).
@@ -280,7 +316,7 @@ Purpose of arrow function:
 
        var p = new Person();
        ```
-    1. This can be somewhat fixed by capturing the value of `this`: 
+    1. Before ECMAScript 6, _this_ can somewhat be fixed by capturing its value into different variable: 
        ``` 
        function Person() {
         var that = this; // remember in chapter 01 - variable is function scoped in JavaScript
