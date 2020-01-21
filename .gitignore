@@ -1,0 +1,75 @@
+# nextjs
+**/.next
+
+# backup from emacs
+**~
+
+# Lock files used by the Emacs editor
+.\#*
+
+# OSX
+**.DS_Store
+
+# Vim
+**.swp
+**.swn
+**.swo
+**.swm
+**.un
+**.un~
+**vim_config/
+
+# backup and temporary files
+**.bak
+**temp/
+**.temp
+**tmp/
+**.tmp
+
+# Merge related file
+**.orig
+
+# Compiled files
+**.pyc
+**.class
+**.o
+**build/
+**out/
+
+# gradle
+**gradle/
+
+# Intellij
+**.idea/
+**.idea
+**logs/
+**.iws
+**.ipr
+**.iml
+**.ids
+
+# media
+*.wav
+
+# Maven
+**target/
+
+# Oracle wallet lock
+**.lck
+
+# libreoffice lock
+.~lock**
+
+# ignore sample datafile folder
+docs/legacy/sample_data/**
+docs/legacy/~*.*
+
+**.log
+
+**.output
+
+meta_data_log_dir
+
+# npm packages
+node_modules
+dist

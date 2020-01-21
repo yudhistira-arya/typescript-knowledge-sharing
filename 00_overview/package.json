@@ -1,0 +1,15 @@
+{
+  "name": "00_overview",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tslib": "^1.10.0",
+    "typescript": "^3.7.5"
+  }
+}

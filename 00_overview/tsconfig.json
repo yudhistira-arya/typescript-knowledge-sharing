@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "allowJs": true,
+    "target": "es2015",
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "types": []
+  },
+  "include": [
+    "**.ts",
+    "**.tsx",
+    "**.js"
+  ],
+  "compileOnSave": true,
+  "files": ["main.ts"]
+}
