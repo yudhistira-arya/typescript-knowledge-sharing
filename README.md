@@ -483,7 +483,48 @@ Use case of generators:
 
 ### Async-await
 
-TODO:
+Async-await is a syntactic sugar to further simplify asynchronous programming. It's introduced in ECMAScript 8.
+
+Some note on async-await mechanism in JavaScript: 
+
+* `async` function always returns a _promise_ (for more information refer to the promise chapter above). 
+* `await` can only be used inside `async` function.
+* `await` blocks the code execution within `async` function. When the code block, JavaScript event-loop will execute 
+  something else.
+* There can be multiple `await` statements within a single `async` function.
+
+``` 
+function delay(millisecond: number, count: number) {
+    return new Promise<number>(resolve => {
+        setTimeout(() => resolve(count), millisecond);
+    })
+}
+
+// @ts-ignore
+async function asyncFunction() {
+    console.log("async: before first await");
+    // it will still sync tilll this point where await will yield to the caller
+    const res1 = await delay(100, 10);
+    console.log(`async: ${res1}`);
+
+    const res2 = await delay(200, 11);
+    console.log(`async: ${res2}`);
+
+    const res3 = await delay(1000, 12);
+    console.log(`async: ${res3}`);
+    return res3;
+}
+
+// usage
+console.log("async: before async method");
+let result = asyncFunction();
+console.log("async: after async method");
+// wait for the promise to complete
+Promise.all([result,]); 
+```
+
+
+Behind the scene, _async-await_ is just syntactical sugar for using generators + promises:
 
 
 ## 05: 3rd Party Libraries
