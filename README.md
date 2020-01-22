@@ -344,10 +344,40 @@ Purpose of arrow function:
 
 ### Classes
 
+TODO
+
 ### Interfaces
+
+TODO
 
 ### Object Literal
 
 TODO: don't forget spread operator
 
 ## 04: Promise, Generators, Async-await 
+
+### Promise
+
+TODO:
+
+### Generators
+
+TODO:
+
+### Async-await
+
+TODO:
+
+## 05: 3rd Party Libraries
+
+### RxJS
+
+TODO: 
+
+### NgRx
+
+TODO: 
+
+### Jest
+
+TODO: 
