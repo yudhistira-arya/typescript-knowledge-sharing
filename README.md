@@ -305,7 +305,7 @@ Purpose of arrow function:
   `this` has the original meaning from the enclosing context during declaration. 
   
    1. Example below will throw error because `this` inside `setInterval` is not the same with `this` inside the `Person` 
-      constructor (remember rule#1?).
+      constructor (remember binding rule#1?).
        ``` 
        function Person() {
          this.age = 0;
@@ -354,11 +354,75 @@ TODO
 
 TODO: don't forget spread operator
 
-## 04: Promise, Generators, Async-await 
+## 04: Asynchronous programming: Promise, Generators, Async-await 
+
+### JavaScript Event Loop
+
+By default, a JavaScript runtime (including Node.JS and web browser) has these properties: 
+
+* 1 process
+* 1 thread
+* One event loop per thread
+
+TODO: expand more
 
 ### Promise
 
-TODO:
+Promise was added in ECMAScript 6 to simplify callback-style asynchronous programming. 
+
+Before promise: 
+
+``` 
+import * as fs from "fs";
+
+function loadJSON(filename: string, callback: (error: Error, result?: any) => void) {
+    fs.readFile(filename, function (err, data) {
+        if (err) {
+            return callback(err);
+        }
+        try {
+            // Rule 03: Contain all your sync code in a try catch
+            var parsed = JSON.parse(data.toString());
+        }
+        catch (err) {
+            // Rule 02: never throw error, it should be handled by callback
+            return callback(err);
+        }
+        // except when you call the callback
+        return callback(null, parsed);
+    });
+}
+
+// usage:
+loadJSONCallback("./sample.json", (error, result) => {
+    if (error) {
+        console.log(`Callback: Error happened: ${error}`);
+    } else {
+        console.log(`Callback: JSON content for hello property is: ${result.hello}`);
+    }
+});
+```
+**NOTE**: in order to maintain correctness when writing callback,  some rules need to be followed.
+1. Never call the callback twice
+1. Never throw error
+1. Contain all your sync code in a try catch, except when you call the callback.
+
+With promise, you can simplify the code further while still maintaining correctness: 
+
+``` 
+// fs has a promise-based variant
+import {promises as fs} from "fs";
+
+export function loadJsonPromise(filename: string): Promise<any> {
+    return fs.readFile(filename) // we are using promise variant of fs
+        .then(data => JSON.parse(data.toString()))
+}
+
+// usage:
+loadJsonPromise("./sample.json")
+    .then(jsonData => console.log(`Promise: JSON content for hello property is: ${jsonData.hello}`)) // on success
+    .catch(error => console.log(`Promise: Error happened: ${error}`)); // on error
+```
 
 ### Generators
 
@@ -368,11 +432,16 @@ TODO:
 
 TODO:
 
+
 ## 05: 3rd Party Libraries
 
 ### RxJS
 
 TODO: 
+
+### Angular
+
+TODO:
 
 ### NgRx
 
