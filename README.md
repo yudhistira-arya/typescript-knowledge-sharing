@@ -426,7 +426,60 @@ loadJsonPromise("./sample.json")
 
 ### Generators
 
-TODO:
+Generator function are denoted by `function *` syntax and the usage of `yield` keyword inside it. Calling generator 
+function returns a _generator object_, which implements iterator API (i.e. have the typical `next`, `return`, and 
+`throw` methods).
+
+Use case of generators: 
+
+* Lazy iterator for collections (so you don't have to load everything into the memory):
+    ```
+    function* infiniteSequence() {
+        let i = 0;
+        while (true) {
+            yield i++;
+        }
+    }
+
+    let iterator = infiniteSequence();  // will return Generator instance
+    while (true) {
+        // iterator.next() will return IteratorResult with {value: <value>, done: false}
+        console.log(iterator.next());
+    }
+    ```
+* Externally controlled execution: allows a function to pause its execution.
+    ``` 
+    export function* pauseableFunction() {
+        console.log('Execution started');
+        yield 0;
+        console.log('Execution resumed');
+        yield 1;
+        console.log('Execution end');
+    }
+  
+    const fromPausableIterator = pauseableFunction();
+    console.log('Starting...'); // This will execute before anything in the generator function body executes
+    console.log(fromPausableIterator.next()); // { value: 0, done: false }
+    console.log(fromPausableIterator.next()); // { value: 1, done: false }
+    console.log(fromPausableIterator.next()); // { value: undefined, done: true }
+    ```
+  
+    **NOTE**: you can pass in value back to generator during _next_.
+    
+    ``` 
+    export function* twoWayGeneratorFunction() {
+        const bar = yield 'foo'; // bar may be *any* type
+        console.log(`generator: ${bar}`); // bar!
+    }
+
+    const twoWayGeneratorIterator = twoWayGeneratorFunction();
+    let twoWayGenerator = twoWayGeneratorFunction();
+    const foo = twoWayGenerator.next();
+    console.log(`generator: ${foo.value}`);
+    const nextThing = twoWayGenerator.next("bar");
+    console.log(`generator: Value ${nextThing.value}`); // undefined
+    console.log(`generator: Is done ${nextThing.done}`); // true - because no more yield
+    ```
 
 ### Async-await
 
