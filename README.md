@@ -565,7 +565,128 @@ runner(asyncFunctionSimulation());
 
 ### RxJS
 
-TODO: 
+Why RxJS: 
+1. You can easily handle stream of _event_ using RxJS. 
+1. Fundamental building block of Angular. 
+
+**NOTE**: The fundamental unit of reactive reasoning is the stream of events. Events can come in the form of objects, 
+data feeds, mouse movements, or even exceptions.
+
+RxJS consists of 3 parts: _Observable_, _subscription_, and _operators_
+* _Observable_: source of data that can arrive over time. The fundamental unit of reactive reasoning is the stream of 
+  events. Events can come in the form of objects, data feeds, mouse movements, or even exceptions.
+* _Subscription_: subscriptions are like a faucet, you have a stream of water ready to be tapped (_observable_). 
+* _Operators_: offer a way to manipulate values from a source.
+
+#### Observable
+
+Simple example: 
+
+``` 
+const dataSource = of(1, 2, 3, 4, 5); // observable
+const subscription = dataSource
+    .pipe(map(value => value + 1)) // map operator
+    .subscribe(value => console.log(value)); // subscription
+```
+
+You can also tap an observable from an event: 
+
+``` 
+import {fromEvent} from 'rxjs'
+const button = document.getElementById('myButton');
+const myObservable = fromEvent(button, 'click')
+```
+
+#### Subscription
+
+Subscription callback structure: 
+
+``` 
+const subscription = myObservable.subscribe({
+  // on successful emissions
+  next: event => console.log(event),
+  // on errors
+  error: error => console.log(error),
+  // called once on completion
+  complete: () => console.log('complete!')
+});
+```
+
+**IMPORTANT NOTE**: 
+1. Observable are not active (**cold**), or do not activate a producer like wiring up an event listener until 
+   there's a subscription.
+   ``` 
+   const observable = new Observable(observer => {
+       console.log("Begin producing observable data");
+       observer.next(`first data`);
+       observer.next(`second data`);
+       observer.next(`third data`);
+       console.log("Finish producing observable data");
+   });
+
+   console.log("Begin subscribing"); // this will print before "Begin producing observable data" above 
+   observable.subscribe(value => {
+       console.log(`Value: ${value}`);
+   });
+   ```
+1. It's important to note that each subscription will create a new execution context. If you're subscribing to an event, 
+   this means calling `subscribe` a second time below will create a new event listener.
+   ``` 
+    const observable = new Observable(observer => {
+      slowProcessing(() => observer.next(`task a. Execution no: ${counter++}`));
+      slowProcessing(() => observer.next(`task b. Execution no: ${counter++}`));
+      slowProcessing(() => observer.next(`task c. Execution no: ${counter++}`));
+    });
+
+    const firstSubscriber = observable.subscribe(value => {
+      console.log(`first-subscriber: ${value}`);
+    });
+
+    setTimeout(() => {
+      // this will re-trigger the slowProcessing inside the observable
+      const secondSubscriber = observable.subscribe(value => {
+          console.log(`second-subscriber: ${value}`)
+      })
+    }, 1000);
+   ```
+   By default, a subscription creates a one on one, one-sided conversation between the observable and observer 
+   (**unicasting**). 
+
+#### Operators
+
+##### Creation operators
+
+`create`: deprecated, use `new` constructor of `Observable` instead: 
+
+``` 
+const hello = Observable.create(function(observer) {
+  observer.next('Hello');
+  observer.next('World');
+  observer.complete();
+});
+
+const subscribe = hello.subscribe(val => console.log(val));
+```
+
+`fromEvent`, `of`: 
+
+``` 
+const myObservable = fromEvent(button, 'click')
+    .pipe(
+        takeUntil(userLeavesArticle)
+    );
+myObservable.subscribe(event => {...});
+```
+
+`timer`: 
+
+``` 
+// first emit after 100ms delay then emit every 200ms after that.
+const observable = timer(99, 200);
+observable.subscribe(value => {
+    console.log(`first-subscriber: ${value}`);
+});
+```
 
 ### Angular
 
