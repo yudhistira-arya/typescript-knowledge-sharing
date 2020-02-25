@@ -6,9 +6,9 @@ import {arrowFunction, constructorBinding, explicitBindings, implicitBindings} f
  * for default binding please refer to global_binding.js which you can run in browser console
  */
 
-implicitBindings();
-explicitBindings();
-constructorBinding();
+// implicitBindings();
+// explicitBindings();
+// constructorBinding();
 
 // ECMAScript 6 introduce arrow function for shorter anonymous method and simplify the concept of this
-arrowFunction();
+// arrowFunction();

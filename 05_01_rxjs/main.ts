@@ -6,4 +6,4 @@ import {simpleTimer} from "./timer-operator";
 // basicObservable();
 // coldObservable();
 // doubleSubscriber();
-simpleTimer();
+// simpleTimer();

@@ -1,8 +1,8 @@
 import {forInLoop, forOfLoop, jsLocalScopingLoop, jsScopingBlock, jsScopingLoop, letScoping} from "./js-scoping";
 
-jsScopingBlock();
-jsScopingLoop();
-jsLocalScopingLoop();
-letScoping();
-forInLoop();
-forOfLoop();
+// jsScopingBlock();
+// jsScopingLoop();
+// jsLocalScopingLoop();
+// letScoping();
+// forInLoop();
+// forOfLoop();

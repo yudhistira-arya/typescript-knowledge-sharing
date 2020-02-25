@@ -1,7 +1,7 @@
 import {asyncAwaitDemo} from "./asyncAwaitDemo";
 import {asyncFunctionSimulation, runner} from "./promiseandgeneratorequivalent";
 
-asyncAwaitDemo();
+// asyncAwaitDemo();
 
 // promise + generators equivalent
-runner(asyncFunctionSimulation());
+// runner(asyncFunctionSimulation());
