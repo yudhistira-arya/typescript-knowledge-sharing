@@ -342,17 +342,88 @@ Purpose of arrow function:
 
 ## 03: Object, Classes, Interfaces
 
-### Classes
+### class 
 
-TODO
+Class is pretty straightforward in Typescript: 
 
-### Interfaces
+``` 
+// typical class
+class Greeter {
+    greeting: string;
+    constructor(message: string) {
+        this.greeting = message;
+    }
+    greet() {
+        return "Hello, " + this.greeting;
+    }
+}
 
-TODO
+let greeter = new Greeter("world");
+```
+* accessor is `public` by default
+* available accessor: `private`, `public`, `protected`
+* `abstract` class is supported.
+* inheritance is supported.
 
-### Object Literal
+You can mark class properties as `readonly`. `readonly` properties must be initialized in the class constructor / 
+property declaration.
 
-TODO: don't forget spread operator
+``` 
+class Person {
+    readonly name: string; 
+    constructor(name: string) {
+        this.name = name;
+    } 
+}
+```
+
+Typescript allow _accessor_ which might be useful for validation / pre-processing without having to set getter or 
+setter method: 
+
+``` 
+class Employee {
+    private static readonly FULL_NAME_MAX_LENGTH = 15;
+    private _fullName: string;
+
+    get fullName(): string {
+        console.log("Getting full name");
+        return this._fullName == undefined || this._fullName == null ? "" : this.__fullName;
+    }
+
+    set fullName(newName: string) {
+        console.log("Setting new full name");
+        if (newName && newName.length > Employee.FULL_NAME_MAX_LENGTH) {
+            // validation before assigning
+            throw new Error("fullName has a max length of " + Employee.FULL_NAME_MAX_LENGTH);
+        }
+        this._fullName = newName;
+    }
+}
+
+let employee = new Employee();
+employee.fullName = "Izzul";
+
+console.log(`Employee full name is ${employee.fullName}`);
+```
+
+### Interface
+
+Interface allow you to design by contract: 
+
+``` 
+export interface Person {
+    name: string;
+    age?: number;
+    getDetail?: (this: Person) => string; // function type definition
+}
+
+let izzul: Person = {name: "Izzul"}  as Person;
+console.log(`person name: ${izzul.name}`);
+
+let izzul2: Person = {name: "Izzul", age: 17};
+console.log(`person name: ${izzul2.name}, person age: ${izzul2.age}`);
+```
+* In Typescript, any object can satisfy interface's contract as long as the its structure is the same.
 
 ## 04: Asynchronous programming: Promise, Generators, Async-await 
 
@@ -364,7 +435,11 @@ By default, a JavaScript runtime (including Node.JS and web browser) has these p
 * 1 thread
 * One event loop per thread
 
-TODO: expand more
+![event-loop visualized. Credit to flaviocopes.com](event-loop.png)
+
+Useful links: 
+* [javascript-event-loop by flaviocopes.com](https://flaviocopes.com/javascript-event-loop/)
+* [mdn documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop)
 
 ### Promise
 

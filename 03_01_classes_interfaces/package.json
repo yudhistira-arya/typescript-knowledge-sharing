@@ -1,0 +1,16 @@
+{
+  "name": "02_this",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^13.1.8",
+    "tslib": "^1.10.0",
+    "typescript": "^3.7.5"
+  }
+}
